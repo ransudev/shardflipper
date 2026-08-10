@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shard Fusion Profit Finder
 
-## Getting Started
+A responsive Next.js application that ranks single-step Hypixel SkyBlock shard fusions using current Bazaar prices. It uses instant-buy prices for ingredients, instant-sell prices for outputs, and performs search and sorting in the browser after the server prepares the results.
 
-First, run the development server:
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` — start the local application
+- `npm test` — run calculation and formatting tests
+- `npm run lint` — run ESLint
+- `npm run build` — create a production build
 
-## Learn More
+## Data model
 
-To learn more about Next.js, take a look at the following resources:
+The complete fusion catalog comes from `reference/SkyShards-master/public/fusion-data.json`. The app converts that catalog into its own normalized model, removes mirrored ingredient pairs, prices every available candidate against the current Bazaar snapshot, and keeps the cheapest valid ingredient path for each output and quantity. The current catalog contains 134,971 unique candidates and up to 408 output/quantity paths.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Bazaar data is cached for 60 seconds and normalized to the shard products and top-of-book prices the calculator uses. Item metadata is cached for one hour. Missing metadata falls back to the catalog name or a display name derived from the shard ID, while missing market data excludes that candidate from the ranking. Shard icons are served from the reference dataset with a generated fallback for unknown IDs.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Coin estimates exclude Bazaar taxes, fusion bonuses, and slippage beyond the top order-book entry.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The catalog and shard icons are used under their MIT license. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for attribution. The catalog adapter, pricing reduction, and application code are independently implemented for this project.

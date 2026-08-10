@@ -1,7 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  cacheComponents: true,
+  outputFileTracingIncludes: {
+    "/api/shards/*/icon": [
+      "./reference/SkyShards-master/public/shardIcons/**/*.png",
+    ],
+  },
+  poweredByHeader: false,
 };
 
 export default nextConfig;

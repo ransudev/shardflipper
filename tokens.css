@@ -1,0 +1,64 @@
+/* Hallmark · theme: Garden · genre: editorial · audience: Hypixel SkyBlock traders */
+
+:root {
+  --color-paper: oklch(97% 0.012 105);
+  --color-paper-2: oklch(94.5% 0.016 105);
+  --color-paper-3: oklch(91% 0.018 105);
+  --color-surface: oklch(99% 0.007 105);
+  --color-rule: oklch(83% 0.018 105);
+  --color-rule-strong: oklch(72% 0.025 105);
+  --color-ink: oklch(23% 0.025 105);
+  --color-ink-2: oklch(36% 0.022 105);
+  --color-neutral: oklch(50% 0.018 105);
+  --color-muted: oklch(49% 0.016 105);
+  --color-accent: oklch(58% 0.16 145);
+  --color-accent-2: oklch(47% 0.12 145);
+  --color-accent-soft: oklch(93% 0.04 145);
+  --color-accent-ink: oklch(20% 0.05 145);
+  --color-error: oklch(56% 0.17 28);
+  --color-error-soft: oklch(94% 0.03 28);
+  --color-focus: oklch(46% 0.17 145);
+
+  --font-display: var(--font-body);
+  --font-body: "IBM Plex Sans", ui-sans-serif, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --text-xs: 0.6875rem;
+  --text-sm: 0.8125rem;
+  --text-base: 1rem;
+  --text-md: 1.25rem;
+  --text-lg: 1.5625rem;
+  --text-xl: 1.9531rem;
+  --text-2xl: 2.4414rem;
+  --text-3xl: 3.0518rem;
+  --text-display: clamp(2.75rem, 5vw + 1rem, 5.25rem);
+
+  --space-3xs: 0.125rem;
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+  --space-4xl: 9rem;
+  --page-gutter: clamp(1rem, 4vw, 4rem);
+  --content-max: 88rem;
+
+  --rule-hair: 1px;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.75rem;
+  --shadow-whisper: 0 1px 2px oklch(20% 0.01 105 / 0.05);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+
+  --z-base: 1;
+  --z-raised: 10;
+  --z-sticky: 200;
+}
