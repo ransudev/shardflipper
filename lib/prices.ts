@@ -22,6 +22,12 @@ export function getInstaSellPrice(product: BazaarProduct): number | null {
   return validPrice(quickPrice) ? quickPrice : null;
 }
 
+/** Hypixel's average buy-order price for the current Bazaar snapshot. */
+export function getAverageBuyOrderPrice(product: BazaarProduct): number | null {
+  const averagePrice = product.quick_status.buyPrice;
+  return validPrice(averagePrice) ? averagePrice : null;
+}
+
 /** Existing calculator aliases, kept stable while exposing market-accurate names for alerts. */
 export function getInputPrice(product: BazaarProduct): number | null {
   return getBuyOrderPrice(product);

@@ -28,6 +28,6 @@ Bazaar data is cached for 60 seconds and normalized to the shard products and to
 
 Coin estimates exclude Bazaar taxes, fusion bonuses, and slippage beyond the top order-book entry.
 
-The `/shard-alerts` page watches Direct shards for rising Insta-sell prices. Its comparison baseline is stored in the visitor's browser, so the first visit starts tracking and later visits can show moves such as 12K → 16K.
+The `/shard-alerts` page watches Direct shards for price spikes. It compares the current top instant-sell order with Hypixel's average buy-order price from the same Bazaar snapshot, so alerts are stateless and do not depend on browser-local history.
 
 The catalog and shard icons are used under their MIT license. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for attribution. The catalog adapter, pricing reduction, and application code are independently implemented for this project.

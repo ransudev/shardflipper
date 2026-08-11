@@ -3,7 +3,7 @@ import "server-only";
 import catalogJson from "@/data/fusion-data.json";
 import ratesJson from "@/data/rates.json";
 import { getBazaarData } from "@/lib/hypixel";
-import { getBuyOrderPrice, getInstaSellPrice } from "@/lib/prices";
+import { getAverageBuyOrderPrice, getBuyOrderPrice } from "@/lib/prices";
 import type { ShardAlert } from "@/types/shardAlerts";
 import type { FusionCatalog } from "@/types/fusionCatalog";
 
@@ -34,8 +34,8 @@ export async function getShardAlertsData(): Promise<{
       const product = bazaar.products[shard.id];
       return {
         ...shard,
-        buyOrderPrice: product ? getBuyOrderPrice(product) : null,
-        instaSellPrice: product ? getInstaSellPrice(product) : null,
+        currentPrice: product ? getBuyOrderPrice(product) : null,
+        averagePrice: product ? getAverageBuyOrderPrice(product) : null,
       };
     }),
   };

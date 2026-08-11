@@ -11,8 +11,8 @@ export default async function ShardAlertsPage() {
       <section className="alerts-hero" aria-labelledby="alerts-title">
         <div className="alerts-page-inner">
           <p className="section-index">Market / Direct shards</p>
-          <h1 id="alerts-title">Catch the shards moving up.</h1>
-          <p className="alerts-page-intro">Track directly obtainable shards against your last snapshot and surface the price moves worth watching.</p>
+          <h1 id="alerts-title">Catch real price spikes.</h1>
+          <p className="alerts-page-intro">Compare current instant-sell prices with Hypixel’s average Bazaar data and surface direct shards trading meaningfully above normal.</p>
         </div>
       </section>
       <ShardAlerts alerts={alerts} directCount={directCount} lastUpdated={lastUpdated} />
