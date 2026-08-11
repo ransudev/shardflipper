@@ -41,6 +41,9 @@ yarn-error.log*
 .hallmark
 .impeccable
 
+# local reference source
+/reference/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   outputFileTracingIncludes: {
     "/api/shards/*/icon": [
-      "./reference/SkyShards-master/public/shardIcons/**/*.png",
+      "./public/shardIcons/**/*.png",
     ],
   },
   poweredByHeader: false,

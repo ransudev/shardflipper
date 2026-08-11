@@ -1,24 +1,43 @@
-/* Hallmark · theme: Garden · genre: editorial · audience: Hypixel SkyBlock traders */
+/* Shard Fusion Finder · design tokens · Catppuccin Mocha (dark) */
 
 :root {
-  --color-paper: oklch(97% 0.012 105);
-  --color-paper-2: oklch(94.5% 0.016 105);
-  --color-paper-3: oklch(91% 0.018 105);
-  --color-surface: oklch(99% 0.007 105);
-  --color-rule: oklch(83% 0.018 105);
-  --color-rule-strong: oklch(72% 0.025 105);
-  --color-ink: oklch(23% 0.025 105);
-  --color-ink-2: oklch(36% 0.022 105);
-  --color-neutral: oklch(50% 0.018 105);
-  --color-muted: oklch(49% 0.016 105);
-  --color-accent: oklch(58% 0.16 145);
-  --color-accent-2: oklch(47% 0.12 145);
-  --color-accent-soft: oklch(93% 0.04 145);
-  --color-accent-ink: oklch(20% 0.05 145);
-  --color-error: oklch(56% 0.17 28);
-  --color-error-soft: oklch(94% 0.03 28);
-  --color-focus: oklch(46% 0.17 145);
+  /* Surfaces (Catppuccin Mocha) */
+  --color-paper: #1E1E2E; /* base · page background */
+  --color-paper-2: #181825; /* mantle · deeper fills */
+  --color-paper-3: #A6ADC8; /* subtext0 · muted text */
+  --color-surface: #313244; /* surface0 · cards */
 
+  /* Borders */
+  --color-rule: #45475A; /* surface1 */
+  --color-rule-strong: #585B70; /* surface2 */
+
+  /* Text */
+  --color-ink: #CDD6F4; /* text */
+  --color-ink-2: #BAC2DE; /* subtext1 */
+  --color-neutral: #7F849C; /* overlay1 */
+  --color-muted: #A6ADC8; /* subtext0 */
+
+  /* Accent (Catppuccin lavender + blue) */
+  --color-accent: #B4BEFE; /* lavender */
+  --color-accent-2: #89B4FA; /* blue */
+  --color-info: oklch(82% 0.12 220); /* sky: live data and directional cues */
+  --color-positive: oklch(83% 0.13 145); /* mint: profitable / healthy */
+  --color-market: oklch(83% 0.12 70); /* peach: market-facing emphasis */
+  --color-accent-soft: color-mix(in oklab, var(--color-accent) 16%, var(--color-surface));
+  --color-positive-soft: color-mix(in oklab, var(--color-positive) 14%, var(--color-surface));
+  --color-accent-ink: #1E1E2E; /* base · text on accent */
+
+  /* Error */
+  --color-error: #F38BA8; /* red */
+  --color-error-soft: color-mix(in oklab, var(--color-error) 14%, var(--color-surface));
+
+  --color-focus: #B4BEFE; /* lavender */
+
+  /* Elevated panel (hero, loading, error) */
+  --color-hero: #11111B; /* crust */
+  --color-hero-rule: #313244; /* surface0 */
+
+  /* Type */
   --font-display: var(--font-body);
   --font-body: "IBM Plex Sans", ui-sans-serif, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
@@ -33,6 +52,7 @@
   --text-3xl: 3.0518rem;
   --text-display: clamp(2.75rem, 5vw + 1rem, 5.25rem);
 
+  /* Space */
   --space-3xs: 0.125rem;
   --space-2xs: 0.25rem;
   --space-xs: 0.5rem;
@@ -46,11 +66,13 @@
   --page-gutter: clamp(1rem, 4vw, 4rem);
   --content-max: 88rem;
 
+  /* Shape & depth */
   --rule-hair: 1px;
-  --radius-sm: 0.25rem;
-  --radius-md: 0.75rem;
-  --shadow-whisper: 0 1px 2px oklch(20% 0.01 105 / 0.05);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --shadow-whisper: 0 1px 2px oklch(20% 0.02 280 / 0.07);
 
+  /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
@@ -58,6 +80,7 @@
   --dur-short: 220ms;
   --dur-long: 420ms;
 
+  /* Layering */
   --z-base: 1;
   --z-raised: 10;
   --z-sticky: 200;

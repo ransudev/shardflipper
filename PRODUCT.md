@@ -18,11 +18,11 @@ Hypixel SkyBlock players who are actively comparing Bazaar prices while deciding
 
 ## Product Purpose
 
-Shard Fusion Finder turns the current Bazaar snapshot into a ranked list of profitable shard-fusion paths. Success means a player can find a worthwhile path, understand its ingredient cost and output value, and move on to the next decision without scanning an unstructured catalog.
+Shard Fusion Finder turns the current Bazaar snapshot into a ranked list of profitable single- and multi-step shard-fusion paths. Success means a player can find a worthwhile chain, understand every purchase and fusion in it, and move on to the next decision without scanning an unstructured catalog.
 
 ## Positioning
 
-The product evaluates every known fusion candidate against the live market and selects the cheapest available ingredient path for each output, instead of presenting a static recipe list.
+The product evaluates every known fusion candidate against the live market, recursively compares direct purchases with intermediate fusions, and selects the cheapest acyclic chain for each output instead of presenting a static recipe list.
 
 ## Operating Context
 
@@ -31,7 +31,8 @@ Players use the scanner during a live market session. They search by shard or ou
 ## Capabilities and Constraints
 
 - Fetches live Hypixel Bazaar data and SkyBlock item metadata when available.
-- Uses the SkyShards reference dataset as the fusion catalog source and serves shard icons from the reference assets with a fallback.
+- Uses the checked-in SkyShards fusion catalog and serves checked-in shard icons with a generated fallback for unknown IDs.
+- Provides a Shard alerts page for Direct shards, comparing the current Insta-sell price with the previous browser-local snapshot and sorting by price change, Insta-sell price, or Buy order price.
 - Shows market calculations, freshness, scan coverage, unavailable candidates, and ingredient details.
 - The main scanner should show 10 paths per page with clear previous/next controls and retain the active search and sort state.
 - No authentication, accounts, or persistent user data are required.
@@ -45,7 +46,7 @@ The product name is Shard Fusion Finder. Copy should stay direct, technical, and
 
 - Live Bazaar integration in `lib/hypixel.ts` and `lib/prices.ts`.
 - Fusion catalog and selection logic in `lib/fusionCatalog.ts`.
-- Reference data and shard icons in `reference/SkyShards-master/public/`.
+- Fusion data in `data/fusion-data.json`, Direct/Fuse rates in `data/rates.json`, and shard icons in `public/shardIcons/`.
 - Existing scanner behavior in `components/FusionTable.tsx`.
 
 ## Product Principles

@@ -28,8 +28,6 @@ export async function GET(
     try {
       const icon = await readFile(path.join(
         process.cwd(),
-        "reference",
-        "SkyShards-master",
         "public",
         "shardIcons",
         `${shortId}.png`,

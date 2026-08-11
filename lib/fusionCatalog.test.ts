@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import catalogDataJson from "@/reference/SkyShards-master/public/fusion-data.json";
+import catalogDataJson from "@/data/fusion-data.json";
 import type { BazaarProduct } from "@/types/bazaar";
 import type { FusionCatalog } from "@/types/fusionCatalog";
 
@@ -71,7 +71,49 @@ describe("fusion catalog selection", () => {
     ]);
   });
 
-  it("covers the complete reference catalog without materializing client rows", () => {
+  it("uses a cheaper intermediate fusion in the selected path", () => {
+    const source: FusionCatalog = {
+      shards: {
+        A: shard("A"),
+        B: shard("B"),
+        C: shard("C"),
+        D: shard("D"),
+        O: shard("O"),
+      },
+      recipes: {
+        C: { "1": [["A", "B"]] },
+        O: { "1": [["C", "D"]] },
+      },
+    };
+    const products = {
+      SHARD_A: product("SHARD_A", 10),
+      SHARD_B: product("SHARD_B", 10),
+      SHARD_C: product("SHARD_C", 100),
+      SHARD_D: product("SHARD_D", 10),
+      SHARD_O: product("SHARD_O", 200),
+    };
+
+    const selection = selectBestMarketRecipes(products, source);
+    const outputPath = selection.recipes.find((recipe) => recipe.output.id === "SHARD_O");
+
+    expect(outputPath?.inputPlans?.[0]).toMatchObject({
+      id: "SHARD_C",
+      method: "fuse",
+      totalCost: 20,
+      producedAmount: 1,
+    });
+    expect(outputPath?.inputPlans?.[0].inputs).toEqual([
+      { id: "SHARD_A", amount: 1, method: "buy", totalCost: 10 },
+      { id: "SHARD_B", amount: 1, method: "buy", totalCost: 10 },
+    ]);
+    expect(outputPath?.inputPlans?.[1]).toMatchObject({
+      id: "SHARD_D",
+      method: "buy",
+      totalCost: 10,
+    });
+  });
+
+  it("covers the complete catalog without materializing client rows", () => {
     const realCatalogProducts: Record<string, BazaarProduct> = {};
     const catalogData = catalogDataJson as unknown as FusionCatalog;
     for (const catalogShard of Object.values(catalogData.shards)) {

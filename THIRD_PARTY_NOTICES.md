@@ -1,8 +1,8 @@
 # Third-party notices
 
-## SkyShards reference data and shard artwork
+## SkyShards data and shard artwork
 
-The fusion catalog and shard artwork under `reference/SkyShards-master` are used as source data. The application integration, market reduction, calculator, API routes, and interface in this repository are independently implemented.
+The fusion catalog and acquisition-rate data under `data/`, along with shard artwork under `public/shardIcons/`, are derived from SkyShards source data. The application integration, market reduction, calculator, API routes, and interface in this repository are independently implemented.
 
 SkyShards is distributed under the MIT License:
 
