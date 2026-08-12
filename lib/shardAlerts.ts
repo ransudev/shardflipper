@@ -71,8 +71,9 @@ async function supabaseRequest<T>(
     throw new Error(`Supabase alert storage failed (${response.status}): ${detail}`);
   }
 
-  if (response.status === 204) return undefined as T;
-  return (await response.json()) as T;
+  const body = await response.text();
+  if (!body.trim()) return undefined as T;
+  return JSON.parse(body) as T;
 }
 
 function isRarity(value: unknown): value is ShardAlert["rarity"] {
@@ -162,5 +163,5 @@ export async function getStoredShardAlertsData(): Promise<ShardAlertSnapshot | n
     config,
     `?id=eq.${SNAPSHOT_ID}&select=id,last_updated,captured_at,direct_count,alerts&limit=1`,
   );
-  return parseStoredSnapshot(rows[0]);
+  return parseStoredSnapshot(rows?.[0]);
 }
