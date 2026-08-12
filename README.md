@@ -28,6 +28,17 @@ Bazaar data is cached for 60 seconds and normalized to the shard products and to
 
 Coin estimates exclude Bazaar taxes, fusion bonuses, and slippage beyond the top order-book entry.
 
-The `/shard-alerts` page watches Direct shards for price spikes. It compares the current top instant-sell order with Hypixel's average buy-order price from the same Bazaar snapshot, so alerts are stateless and do not depend on browser-local history.
+The `/shard-alerts` page watches Direct shards for price spikes. A scheduled background scan compares the current top instant-sell order with Hypixel's average buy-order price from the same Bazaar snapshot, stores the latest result in Supabase, and lets the page display that saved result without fetching Hypixel when a visitor opens it. No browser-local history is used.
+
+## Background shard alerts
+
+The scheduled flow uses GitHub Actions, a protected Next.js route, and one server-managed Supabase snapshot:
+
+1. Run the SQL files in `supabase/migrations/` in timestamp order in the Supabase SQL editor.
+2. Set `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `CRON_SECRET` in the production app environment. Keep the service-role key server-only.
+3. Add `SHARD_ALERTS_URL` and `CRON_SECRET` as GitHub Actions repository secrets. `SHARD_ALERTS_URL` should be the production origin, such as `https://shardflipper.example.com`.
+4. Deploy the app, then use the `Refresh shard alerts` workflow's manual dispatch once to verify the first snapshot. The workflow is scheduled every five minutes afterward.
+
+The website reads the latest saved snapshot from Supabase. GitHub Actions is only the scheduler; it does not store alert history in the browser or in the repository.
 
 The catalog and shard icons are used under their MIT license. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for attribution. The catalog adapter, pricing reduction, and application code are independently implemented for this project.

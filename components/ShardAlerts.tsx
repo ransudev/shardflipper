@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ShardIcon } from "@/components/ShardIcon";
 import { formatCoins } from "@/lib/formatCoins";
-import { SHARD_SPIKE_THRESHOLD_PERCENT, type ShardAlert } from "@/types/shardAlerts";
+import { SHARD_SPIKE_THRESHOLD_PERCENT, type ShardAlert, type ShardAlertSnapshot } from "@/types/shardAlerts";
 
 type SortKey = "spike" | "current" | "average";
 
@@ -13,9 +13,10 @@ type AlertRow = ShardAlert & {
 };
 
 const PAGE_SIZE = 12;
+const EMPTY_ALERTS: ShardAlert[] = [];
 
-function freshness(timestamp: number): string {
-  const seconds = Math.max(0, Math.floor((Date.now() - timestamp) / 1000));
+function freshness(timestamp: number, now: number): string {
+  const seconds = Math.max(0, Math.floor((now - timestamp) / 1000));
   if (seconds < 5) return "just now";
   if (seconds < 60) return `${seconds}s ago`;
   const minutes = Math.floor(seconds / 60);
@@ -38,24 +39,23 @@ function sortValue(row: AlertRow, sort: SortKey): number {
 }
 
 export function ShardAlerts({
-  alerts,
-  directCount,
-  lastUpdated,
+  snapshot,
 }: {
-  alerts: ShardAlert[];
-  directCount: number;
-  lastUpdated: number;
+  snapshot: ShardAlertSnapshot | null;
 }) {
+  const alerts = snapshot?.alerts ?? EMPTY_ALERTS;
+  const directCount = snapshot?.directCount ?? 0;
+  const capturedAt = snapshot?.capturedAt ?? 0;
   const [sort, setSort] = useState<SortKey>("spike");
   const [page, setPage] = useState(1);
-  const [freshnessLabel, setFreshnessLabel] = useState("live");
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    const update = () => setFreshnessLabel(freshness(lastUpdated));
-    update();
-    const interval = window.setInterval(update, 15_000);
+    const interval = window.setInterval(() => setNow(Date.now()), 15_000);
     return () => window.clearInterval(interval);
-  }, [lastUpdated]);
+  }, []);
+
+  const freshnessLabel = snapshot ? freshness(capturedAt, now) : "waiting for first scan";
 
   const rows = useMemo<AlertRow[]>(() => alerts.map((alert) => {
     const spike = alert.currentPrice !== null && alert.averagePrice !== null
@@ -96,24 +96,24 @@ export function ShardAlerts({
     <section className="alerts-content" aria-labelledby="alerts-list-title">
       <div className="alerts-content-inner">
         <div className="alerts-status-line">
-          <span className="live-dot" aria-hidden="true" />
-          <span>Live snapshot</span>
+          <span className={`live-dot ${snapshot ? "" : "status-dot-muted"}`} aria-hidden="true" />
+          <span>{snapshot ? "Background scan" : "Scan not configured"}</span>
           <span aria-hidden="true">·</span>
           <span>Updated {freshnessLabel}</span>
           <span className="alerts-status-separator" aria-hidden="true">·</span>
           <span>{directCount} direct shards monitored</span>
         </div>
 
-        <div className="alerts-summary" aria-label="Shard alert summary">
+        {snapshot && <div className="alerts-summary" aria-label="Shard alert summary">
           <div><span>Price spikes</span><strong>{risingRows.length}</strong></div>
           <div><span>Market coverage</span><strong>{pricedCount}/{directCount}</strong></div>
           <div><span>Largest spike</span><strong>{largestSpike?.spikePercent !== null && largestSpike?.spikePercent !== undefined ? formatPercent(largestSpike.spikePercent) : "—"}</strong></div>
-        </div>
+        </div>}
 
         <div className="alerts-heading">
           <div>
             <h2 id="alerts-list-title">Direct shards above average</h2>
-            <p>Compared with Hypixel’s average buy-order price in the current Bazaar snapshot. Spikes are {SHARD_SPIKE_THRESHOLD_PERCENT}% or more above average.</p>
+            <p>{snapshot ? `Compared with Hypixel’s average buy-order price in the current Bazaar snapshot. Spikes are ${SHARD_SPIKE_THRESHOLD_PERCENT}% or more above average.` : "A background scan has not saved a Bazaar snapshot yet."}</p>
           </div>
           <label className="alerts-sort" htmlFor="alerts-sort">
             <span>Sort by</span>
@@ -125,7 +125,13 @@ export function ShardAlerts({
           </label>
         </div>
 
-        {visibleRows.length === 0 ? (
+        {!snapshot ? (
+          <div className="alerts-empty">
+            <span className="alerts-empty-mark" aria-hidden="true">…</span>
+            <h3>Waiting for the first background scan.</h3>
+            <p>Configure the server secrets and scheduled job, then this page will show the latest saved alert snapshot.</p>
+          </div>
+        ) : visibleRows.length === 0 ? (
           <div className="alerts-empty">
             <span className="alerts-empty-mark" aria-hidden="true">✓</span>
             <h3>No price spikes right now.</h3>
