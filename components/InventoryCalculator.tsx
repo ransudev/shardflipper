@@ -34,10 +34,13 @@ type UsedItem = {
   required: number;
 };
 
+type ProfitMode = "instantSell" | "sellOffer";
+
 type Recommendation = FusionResult & {
   fusionRuns: number;
   producedAmount: number;
   revenue: number;
+  revenueUnitPrice: number;
   cashCost: number;
   ownedValue: number;
   netProfit: number;
@@ -67,6 +70,10 @@ function normalizeName(value: string): string {
 function parseAmount(value: string): number {
   const amount = Number.parseInt(value, 10);
   return Number.isFinite(amount) && amount > 0 ? amount : 0;
+}
+
+function profitModeLabel(mode: ProfitMode): string {
+  return mode === "instantSell" ? "instant sell" : "sell offer";
 }
 
 function formatStepInput(step: FusionPathStep, fusionRuns: number): string {
@@ -147,6 +154,7 @@ export function InventoryCalculator({
   const [inventory, setInventory] = useState<InventoryRow[]>([
     { key: "inventory-0", shardId: "", shardName: "", amount: "" },
   ]);
+  const [profitMode, setProfitMode] = useState<ProfitMode>("instantSell");
 
   const shardsByName = useMemo(
     () => new Map(shards.map((shard) => [normalizeName(shard.name), shard])),
@@ -223,13 +231,15 @@ export function InventoryCalculator({
           amount,
           required: Math.round((requirementsPerRun.get(id) ?? amount) * fusionRuns),
         }));
-        const revenue = result.outputValue * fusionRuns;
+        const outputValue = result.outputValues[profitMode];
+        const revenue = outputValue * fusionRuns;
 
         return {
           ...result,
           fusionRuns,
           producedAmount: result.output.amount * fusionRuns,
           revenue,
+          revenueUnitPrice: outputValue / result.output.amount,
           cashCost: totals.cashCost,
           ownedValue: totals.ownedValue,
           netProfit: revenue - totals.cashCost - totals.ownedValue,
@@ -240,7 +250,7 @@ export function InventoryCalculator({
       .filter((result) => result.netProfit > 0 && result.usedItems.length > 0)
       .sort((a, b) => b.netProfit - a.netProfit)
       .slice(0, 12);
-  }, [inventoryMap, priceById, results, shardsById]);
+  }, [inventoryMap, priceById, profitMode, results, shardsById]);
 
   const updateRow = (key: string, update: Partial<InventoryRow>) => {
     setInventory((current) => current.map((row) => row.key === key ? { ...row, ...update } : row));
@@ -335,7 +345,36 @@ export function InventoryCalculator({
               <h2>{hasInventory ? `What to do with your ${inventorySummary}` : "What to do with the shards you own"}</h2>
               {hasInventory && <p className="calculator-inventory-value">Worth {inventoryValue > 0 ? formatCoins(inventoryValue) : "an unknown amount"} as-is</p>}
             </div>
-            <span className="calculator-results-count">{hasInventory ? `${recommendations.length} found` : "Waiting for inventory"}</span>
+            <div className="calculator-results-tools">
+              <fieldset className="profit-mode-control">
+                <legend>Show profit using</legend>
+                <div className="profit-mode-options">
+                  <label className={`profit-mode-option${profitMode === "instantSell" ? " active" : ""}`}>
+                    <input
+                      className="sr-only"
+                      type="radio"
+                      name={`${listId}-profit-mode`}
+                      value="instantSell"
+                      checked={profitMode === "instantSell"}
+                      onChange={() => setProfitMode("instantSell")}
+                    />
+                    <span>Instant sell</span>
+                  </label>
+                  <label className={`profit-mode-option${profitMode === "sellOffer" ? " active" : ""}`}>
+                    <input
+                      className="sr-only"
+                      type="radio"
+                      name={`${listId}-profit-mode`}
+                      value="sellOffer"
+                      checked={profitMode === "sellOffer"}
+                      onChange={() => setProfitMode("sellOffer")}
+                    />
+                    <span>Sell offer</span>
+                  </label>
+                </div>
+              </fieldset>
+              <span className="calculator-results-count">{hasInventory ? `${recommendations.length} found` : "Waiting for inventory"}</span>
+            </div>
           </div>
 
           {!hasInventory ? (
@@ -356,8 +395,8 @@ export function InventoryCalculator({
                 const finalStep = recommendation.steps[recommendation.steps.length - 1];
                 const missing = recommendation.buyItems.filter((requirement) => requirement.amount > 0);
                 const used = recommendation.usedItems.filter((requirement) => requirement.amount > 0);
-                const sellVolume = recommendation.output.sellVolume;
-                const lowSellVolume = sellVolume !== undefined && sellVolume < Math.max(1000, recommendation.producedAmount * 2);
+                const executionVolume = profitMode === "instantSell" ? recommendation.output.buyVolume : recommendation.output.sellVolume;
+                const lowExecutionVolume = executionVolume !== undefined && executionVolume < Math.max(1000, recommendation.producedAmount * 2);
 
                 return (
                   <article className="calculator-result-card" key={recommendation.fusionId}>
@@ -371,7 +410,7 @@ export function InventoryCalculator({
                         </div>
                       </div>
                       <div className="calculator-result-profit positive">
-                        <span>Profit over as-is value</span>
+                        <span>Profit via {profitModeLabel(profitMode)}</span>
                         <strong>{formatSignedCoins(recommendation.netProfit)}</strong>
                       </div>
                     </div>
@@ -398,12 +437,13 @@ export function InventoryCalculator({
                     <div className="calculator-result-line calculator-sell-line">
                       <span className="calculator-line-label">Sell</span>
                       <div>
-                        <span>{formatShardQuantity(recommendation.producedAmount)} @ {formatCoins(recommendation.output.unitPrice)} → {formatCoins(recommendation.revenue)} revenue</span>
-                        {lowSellVolume && <small className="calculator-volume-warning">Low sell volume ({formatQuantity(sellVolume ?? 0)})</small>}
+                        <span>{formatShardQuantity(recommendation.producedAmount)} @ {formatCoins(recommendation.revenueUnitPrice)} → {formatCoins(recommendation.revenue)} revenue</span>
+                        <small>Using {profitModeLabel(profitMode)} price</small>
+                        {lowExecutionVolume && <small className="calculator-volume-warning">Low {profitMode === "instantSell" ? "buy" : "sell"} volume ({formatQuantity(executionVolume ?? 0)})</small>}
                       </div>
                     </div>
 
-                    <div className="calculator-result-breakdown" aria-label={`Profit breakdown for ${recommendation.output.name}`}>
+                    <div className="calculator-result-breakdown" aria-label={`Profit breakdown for ${recommendation.output.name} using ${profitModeLabel(profitMode)}`}>
                       <span>{formatCoins(recommendation.revenue)} revenue</span>
                       <b aria-hidden="true">−</b>
                       <span>buy {formatCoins(recommendation.cashCost)}</span>

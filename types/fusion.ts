@@ -25,6 +25,7 @@ export type CalculatedIngredient = FusionIngredient & {
   name: string;
   unitPrice: number;
   totalPrice: number;
+  buyVolume?: number;
   sellVolume?: number;
   imageUrl?: string;
 };
@@ -40,6 +41,11 @@ export type FusionPathStep = {
   materialCost: number;
 };
 
+export type FusionOutputValues = {
+  instantSell: number;
+  sellOffer: number;
+};
+
 export type FusionResult = {
   fusionId: string;
   inputs: CalculatedIngredient[];
@@ -48,6 +54,7 @@ export type FusionResult = {
   output: CalculatedIngredient;
   inputCost: number;
   outputValue: number;
+  outputValues: FusionOutputValues;
   profit: number;
   margin: number;
 };
