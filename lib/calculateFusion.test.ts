@@ -39,6 +39,7 @@ describe("calculateFusion", () => {
     expect(result?.inputCost).toBe(150_000);
     expect(result?.outputValue).toBe(200_000);
     expect(result?.outputValues).toEqual({ instantSell: 200_000, sellOffer: 205_000 });
+    expect(result?.outputValues.sellOffer).toBeGreaterThan(result?.outputValues.instantSell ?? 0);
     expect(result?.profit).toBe(50_000);
     expect(result?.margin).toBeCloseTo(33.33, 2);
     expect(result?.steps).toHaveLength(1);
