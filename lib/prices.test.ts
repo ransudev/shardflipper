@@ -5,8 +5,14 @@ import type { BazaarProduct } from "@/types/bazaar";
 function product(buyPrice: number): BazaarProduct {
   return {
     product_id: "SHARD_TEST",
-    buy_summary: [{ amount: 100, pricePerUnit: buyPrice + 10, orders: 1 }],
-    sell_summary: [{ amount: 100, pricePerUnit: buyPrice + 20, orders: 1 }],
+    buy_summary: [
+      { amount: 100, pricePerUnit: buyPrice + 10, orders: 1 },
+      { amount: 100, pricePerUnit: buyPrice + 30, orders: 1 },
+    ],
+    sell_summary: [
+      { amount: 100, pricePerUnit: buyPrice + 20, orders: 1 },
+      { amount: 100, pricePerUnit: buyPrice + 15, orders: 1 },
+    ],
     quick_status: {
       productId: "SHARD_TEST",
       buyPrice,
@@ -35,8 +41,8 @@ describe("Bazaar execution prices", () => {
   it("maps instant sell to the top buy order and sell offer to the top sell order", () => {
     const bazaarProduct = product(12_000);
 
-    expect(getInstantSellPrice(bazaarProduct)).toBe(12_010);
-    expect(getSellOfferPrice(bazaarProduct)).toBe(12_020);
-    expect(getInstantBuyPrice(bazaarProduct)).toBe(12_020);
+    expect(getInstantSellPrice(bazaarProduct)).toBe(12_030);
+    expect(getSellOfferPrice(bazaarProduct)).toBe(12_015);
+    expect(getInstantBuyPrice(bazaarProduct)).toBe(12_015);
   });
 });

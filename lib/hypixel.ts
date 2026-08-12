@@ -81,12 +81,7 @@ async function readBazaarData(): Promise<BazaarResponse> {
   const bazaar = data as BazaarResponse;
   const shardProducts = Object.fromEntries(
     Object.entries(bazaar.products)
-      .filter(([id]) => id.startsWith("SHARD_"))
-      .map(([id, product]) => [id, {
-        ...product,
-        buy_summary: product.buy_summary.slice(0, 1),
-        sell_summary: product.sell_summary.slice(0, 1),
-      }]),
+      .filter(([id]) => id.startsWith("SHARD_")),
   );
 
   return { ...bazaar, products: shardProducts };
