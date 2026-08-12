@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getAverageBuyOrderPrice } from "@/lib/prices";
+import { getAverageBuyOrderPrice, getInstantBuyPrice, getInstantSellPrice, getSellOfferPrice } from "@/lib/prices";
 import type { BazaarProduct } from "@/types/bazaar";
 
 function product(buyPrice: number): BazaarProduct {
@@ -28,5 +28,15 @@ describe("getAverageBuyOrderPrice", () => {
 
   it("ignores missing or non-positive averages", () => {
     expect(getAverageBuyOrderPrice(product(0))).toBeNull();
+  });
+});
+
+describe("Bazaar execution prices", () => {
+  it("maps instant sell to the top buy order and sell offer to the top sell order", () => {
+    const bazaarProduct = product(12_000);
+
+    expect(getInstantSellPrice(bazaarProduct)).toBe(12_010);
+    expect(getSellOfferPrice(bazaarProduct)).toBe(12_020);
+    expect(getInstantBuyPrice(bazaarProduct)).toBe(12_020);
   });
 });

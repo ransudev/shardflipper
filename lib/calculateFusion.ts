@@ -1,4 +1,4 @@
-import { getBuyOrderPrice, getInputPrice, getOutputPrice } from "@/lib/prices";
+import { getInputPrice, getInstantSellPrice, getSellOfferPrice } from "@/lib/prices";
 import { nameFromShardId } from "@/lib/shardMetadata";
 import type { BazaarProduct } from "@/types/bazaar";
 import type {
@@ -114,14 +114,14 @@ export function calculateFusion(
 
   const outputProduct = products[recipe.output.id];
   if (!outputProduct) return null;
-  const outputPrice = getOutputPrice(outputProduct);
-  const instantSellPrice = getBuyOrderPrice(outputProduct);
-  if (outputPrice === null || instantSellPrice === null) return null;
+  const instantSellPrice = getInstantSellPrice(outputProduct);
+  const sellOfferPrice = getSellOfferPrice(outputProduct);
+  if (instantSellPrice === null || sellOfferPrice === null) return null;
   const output = calculatedIngredient(
     recipe.output.id,
     recipe.output.amount,
-    outputPrice,
-    outputPrice * recipe.output.amount,
+    instantSellPrice,
+    instantSellPrice * recipe.output.amount,
     metadata,
   );
   output.buyVolume = outputProduct.quick_status.buyVolume;
@@ -131,9 +131,9 @@ export function calculateFusion(
   if (inputCost <= 0) return null;
   const outputValues = {
     instantSell: instantSellPrice * recipe.output.amount,
-    sellOffer: output.totalPrice,
+    sellOffer: sellOfferPrice * recipe.output.amount,
   };
-  const outputValue = outputValues.sellOffer;
+  const outputValue = outputValues.instantSell;
   const profit = outputValue - inputCost;
   const purchases = new Map<string, { amount: number; totalCost: number }>();
   const steps: FusionPathStep[] = [];

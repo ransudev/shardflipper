@@ -36,11 +36,11 @@ describe("calculateFusion", () => {
       SHARD_C: product("SHARD_C", 205_000, 200_000),
     }, new Map());
 
-    expect(result?.inputCost).toBe(140_000);
-    expect(result?.outputValue).toBe(205_000);
+    expect(result?.inputCost).toBe(150_000);
+    expect(result?.outputValue).toBe(200_000);
     expect(result?.outputValues).toEqual({ instantSell: 200_000, sellOffer: 205_000 });
-    expect(result?.profit).toBe(65_000);
-    expect(result?.margin).toBeCloseTo(46.43, 2);
+    expect(result?.profit).toBe(50_000);
+    expect(result?.margin).toBeCloseTo(33.33, 2);
     expect(result?.steps).toHaveLength(1);
   });
 
@@ -76,7 +76,7 @@ describe("calculateFusion", () => {
     }, new Map());
 
     expect(result?.inputCost).toBe(30);
-    expect(result?.profit).toBe(170);
+    expect(result?.profit).toBe(160);
     expect(result?.steps.map((step) => step.output.id)).toEqual(["SHARD_C", "SHARD_O"]);
     expect(result?.inputs.map((input) => input.id).sort()).toEqual([
       "SHARD_A",
@@ -87,8 +87,8 @@ describe("calculateFusion", () => {
 
   it("returns unavailable when a required order book is missing", () => {
     const unavailable = product("SHARD_A", 10_000, 9_000);
-    unavailable.buy_summary = [];
-    unavailable.quick_status.buyPrice = 0;
+    unavailable.sell_summary = [];
+    unavailable.quick_status.sellPrice = 0;
 
     expect(calculateFusion(recipe, {
       SHARD_A: unavailable,

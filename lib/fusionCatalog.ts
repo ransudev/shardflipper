@@ -1,7 +1,7 @@
 import "server-only";
 
 import catalogJson from "@/data/fusion-data.json";
-import { getInputPrice, getOutputPrice } from "@/lib/prices";
+import { getInstantBuyPrice, getInstantSellPrice } from "@/lib/prices";
 import type { BazaarProduct } from "@/types/bazaar";
 import type {
   FusionAcquisitionPlan,
@@ -228,7 +228,7 @@ export function selectBestMarketRecipes(
 
   for (const shard of Object.values(source.shards)) {
     const price = products[shard.internal_id]
-      ? getInputPrice(products[shard.internal_id])
+      ? getInstantBuyPrice(products[shard.internal_id])
       : null;
     directCosts.set(
       shard.internal_id,
@@ -240,7 +240,7 @@ export function selectBestMarketRecipes(
 
   const outputPrice = (id: string): number | null => {
     if (!outputPrices.has(id)) {
-      outputPrices.set(id, products[id] ? getOutputPrice(products[id]) : null);
+      outputPrices.set(id, products[id] ? getInstantSellPrice(products[id]) : null);
     }
     return outputPrices.get(id) ?? null;
   };

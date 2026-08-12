@@ -8,7 +8,7 @@ import {
 } from "@/lib/fusionCatalog";
 import { getBazaarData } from "@/lib/hypixel";
 import { getSkyBlockItems } from "@/lib/items";
-import { getInputPrice } from "@/lib/prices";
+import { getInstantSellPrice } from "@/lib/prices";
 import { buildShardMetadata } from "@/lib/shardMetadata";
 import { cacheLife } from "next/cache";
 
@@ -33,7 +33,7 @@ export async function getFusionData() {
     shards: Array.from(metadata.values(), ({ id, name }) => ({
       id,
       name,
-      unitPrice: bazaar.products[id] ? getInputPrice(bazaar.products[id]) ?? undefined : undefined,
+      unitPrice: bazaar.products[id] ? getInstantSellPrice(bazaar.products[id]) ?? undefined : undefined,
     })),
   };
 }
