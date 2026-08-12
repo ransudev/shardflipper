@@ -10,8 +10,12 @@ import { getBazaarData } from "@/lib/hypixel";
 import { getSkyBlockItems } from "@/lib/items";
 import { getInputPrice } from "@/lib/prices";
 import { buildShardMetadata } from "@/lib/shardMetadata";
+import { cacheLife } from "next/cache";
 
 export async function getFusionData() {
+  "use cache";
+  cacheLife({ stale: 30, revalidate: 60, expire: 300 });
+
   const bazaar = await getBazaarData();
   const itemsResult = await Promise.allSettled([getSkyBlockItems()]);
   const items = itemsResult[0].status === "fulfilled" ? itemsResult[0].value : [];

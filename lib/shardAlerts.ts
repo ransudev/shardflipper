@@ -159,9 +159,17 @@ export async function getStoredShardAlertsData(): Promise<ShardAlertSnapshot | n
   const config = getSupabaseConfig();
   if (!config) return null;
 
-  const rows = await supabaseRequest<StoredSnapshotRow[]>(
-    config,
-    `?id=eq.${SNAPSHOT_ID}&select=id,last_updated,captured_at,direct_count,alerts&limit=1`,
-  );
-  return parseStoredSnapshot(rows?.[0]);
+  try {
+    const rows = await supabaseRequest<StoredSnapshotRow[]>(
+      config,
+      `?id=eq.${SNAPSHOT_ID}&select=id,last_updated,captured_at,direct_count,alerts&limit=1`,
+    );
+    return parseStoredSnapshot(rows?.[0]);
+  } catch (error) {
+    console.warn(
+      "Shard alert snapshot unavailable; showing the empty state.",
+      error instanceof Error ? error.message : error,
+    );
+    return null;
+  }
 }
