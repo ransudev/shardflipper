@@ -9,3 +9,10 @@ export type ShardAlert = {
   currentPrice: number | null;
   averagePrice: number | null;
 };
+
+export type ShardAlertSnapshot = {
+  alerts: ShardAlert[];
+  directCount: number;
+  lastUpdated: number;
+  capturedAt: number;
+};

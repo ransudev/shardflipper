@@ -32,10 +32,10 @@ Players use the scanner during a live market session. They search by shard or ou
 
 - Fetches live Hypixel Bazaar data and SkyBlock item metadata when available.
 - Uses the checked-in SkyShards fusion catalog and serves checked-in shard icons with a generated fallback for unknown IDs.
-- Provides a Shard alerts page for Direct shards, comparing the current instant-sell order with Hypixel's average Bazaar buy-order price and sorting by spike size, current price, or Bazaar average.
+- Provides a Shard alerts page for Direct shards, displaying the latest server-generated comparison between the current instant-sell order and Hypixel's average Bazaar buy-order price, sorted by spike size, current price, or Bazaar average.
 - Shows market calculations, freshness, scan coverage, unavailable candidates, and ingredient details.
 - The main scanner should show 10 paths per page with clear previous/next controls and retain the active search and sort state.
-- No authentication, accounts, or persistent user data are required.
+- No authentication or accounts are required; the system stores one server-managed alert snapshot for the public alerts page.
 - Must remain usable on narrow mobile screens without a wide horizontal result scroll.
 
 ## Brand Commitments

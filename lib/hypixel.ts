@@ -1,3 +1,5 @@
+import "server-only";
+
 import { cacheLife } from "next/cache";
 import type { BazaarResponse } from "@/types/bazaar";
 
@@ -58,10 +60,7 @@ async function fetchBazaar(): Promise<Response> {
   );
 }
 
-export async function getBazaarData(): Promise<BazaarResponse> {
-  "use cache";
-  cacheLife({ stale: 30, revalidate: 60, expire: 300 });
-
+async function readBazaarData(): Promise<BazaarResponse> {
   const response = await fetchBazaar();
 
   const data: unknown = await response.json();
@@ -91,4 +90,16 @@ export async function getBazaarData(): Promise<BazaarResponse> {
   );
 
   return { ...bazaar, products: shardProducts };
+}
+
+export async function getBazaarData(): Promise<BazaarResponse> {
+  "use cache";
+  cacheLife({ stale: 30, revalidate: 60, expire: 300 });
+
+  return readBazaarData();
+}
+
+/** Bypasses the page cache for scheduled background scans. */
+export async function getFreshBazaarData(): Promise<BazaarResponse> {
+  return readBazaarData();
 }

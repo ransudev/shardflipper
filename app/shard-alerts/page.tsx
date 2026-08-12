@@ -1,9 +1,9 @@
 import { ShardAlerts } from "@/components/ShardAlerts";
 import { Topbar } from "@/components/Topbar";
-import { getShardAlertsData } from "@/lib/shardAlerts";
+import { getStoredShardAlertsData } from "@/lib/shardAlerts";
 
 export default async function ShardAlertsPage() {
-  const { alerts, directCount, lastUpdated } = await getShardAlertsData();
+  const snapshot = await getStoredShardAlertsData();
 
   return (
     <div className="app-content alerts-page" id="page-content">
@@ -15,7 +15,7 @@ export default async function ShardAlertsPage() {
           <p className="alerts-page-intro">Compare current instant-sell prices with Hypixel’s average Bazaar data and surface direct shards trading meaningfully above normal.</p>
         </div>
       </section>
-      <ShardAlerts alerts={alerts} directCount={directCount} lastUpdated={lastUpdated} />
+      <ShardAlerts snapshot={snapshot} />
     </div>
   );
 }
