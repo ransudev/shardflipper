@@ -1,6 +1,6 @@
 # Shard Fusion Profit Finder
 
-A responsive Next.js application that ranks single- and multi-step Hypixel SkyBlock shard fusion paths using current Bazaar prices. It uses instant-buy prices for starting shards, instant-sell prices for final outputs, and performs search and sorting in the browser after the server prepares the results.
+A responsive Next.js application that ranks Hypixel SkyBlock shard fusion paths using current Bazaar prices. It uses direct instant-buy prices for listed ingredients, current sell-offer prices for final outputs, and performs search and sorting in the browser after the server prepares the results.
 
 ## Getting started
 
@@ -20,9 +20,9 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Data model
 
-The complete fusion catalog comes from `data/fusion-data.json`. Direct/Fuse classification comes from the SkyShards acquisition rates in `data/rates.json`; a shard with a non-zero base acquisition rate is Direct. The app converts the catalog into its own normalized model, removes mirrored ingredient pairs, and computes the cheapest acyclic acquisition route for every shard. Each intermediate shard can be bought directly or produced by another fusion, whichever costs less at the current Bazaar snapshot. The planner then keeps the lowest-cost complete chain for each final output and quantity. The current catalog contains 134,971 unique candidates and up to 408 output/quantity paths.
+The complete fusion catalog comes from `data/fusion-data.json`. Direct/Fuse classification comes from the SkyShards acquisition rates in `data/rates.json`; a shard with a non-zero base acquisition rate is Direct. The app converts the catalog into its own normalized model, removes mirrored ingredient pairs, prices each recipe from its listed Bazaar ingredients, and keeps the lowest-cost recipe for each final output and quantity. The current catalog contains 134,971 unique candidates and up to 408 output/quantity paths.
 
-Expanded results show the full execution order: starting Bazaar purchases, each intermediate fusion, the final fusion, and the instant-sale estimate. Paths are ranked by estimated profit by default and can also be sorted by margin, cost, or output value.
+Expanded results show the direct Bazaar purchases, the fusion, and the current sell-offer estimate. Paths are ranked by estimated sell-offer profit by default and can also be sorted by margin, cost, or output value.
 
 Bazaar data is cached for 60 seconds and normalized to the shard products and top-of-book prices the calculator uses. Item metadata is cached for one hour. Missing metadata falls back to the catalog name or a display name derived from the shard ID, while missing market data excludes that candidate from the ranking. Shard icons are served from `public/shardIcons` with a generated fallback for unknown IDs.
 

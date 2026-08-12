@@ -37,11 +37,11 @@ describe("calculateFusion", () => {
     }, new Map());
 
     expect(result?.inputCost).toBe(150_000);
-    expect(result?.outputValue).toBe(200_000);
+    expect(result?.outputValue).toBe(205_000);
     expect(result?.outputValues).toEqual({ instantSell: 200_000, sellOffer: 205_000 });
     expect(result?.outputValues.sellOffer).toBeGreaterThan(result?.outputValues.instantSell ?? 0);
-    expect(result?.profit).toBe(50_000);
-    expect(result?.margin).toBeCloseTo(33.33, 2);
+    expect(result?.profit).toBe(55_000);
+    expect(result?.margin).toBeCloseTo(36.67, 2);
     expect(result?.steps).toHaveLength(1);
   });
 
@@ -77,7 +77,7 @@ describe("calculateFusion", () => {
     }, new Map());
 
     expect(result?.inputCost).toBe(30);
-    expect(result?.profit).toBe(160);
+    expect(result?.profit).toBe(170);
     expect(result?.steps.map((step) => step.output.id)).toEqual(["SHARD_C", "SHARD_O"]);
     expect(result?.inputs.map((input) => input.id).sort()).toEqual([
       "SHARD_A",

@@ -120,8 +120,8 @@ export function calculateFusion(
   const output = calculatedIngredient(
     recipe.output.id,
     recipe.output.amount,
-    instantSellPrice,
-    instantSellPrice * recipe.output.amount,
+    sellOfferPrice,
+    sellOfferPrice * recipe.output.amount,
     metadata,
   );
   output.buyVolume = outputProduct.quick_status.buyVolume;
@@ -133,7 +133,7 @@ export function calculateFusion(
     instantSell: instantSellPrice * recipe.output.amount,
     sellOffer: sellOfferPrice * recipe.output.amount,
   };
-  const outputValue = outputValues.instantSell;
+  const outputValue = outputValues.sellOffer;
   const profit = outputValue - inputCost;
   const purchases = new Map<string, { amount: number; totalCost: number }>();
   const steps: FusionPathStep[] = [];

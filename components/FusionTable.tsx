@@ -98,7 +98,7 @@ function DetailPanel({ result }: { result: FusionResult }) {
       <div className="detail-step detail-sell-step">
         <span className="detail-index">{result.steps.length + 2}</span>
         <div className="detail-step-copy">
-          <span className="detail-kicker">Instant-sell final output</span>
+          <span className="detail-kicker">Sell-offer final output</span>
           <div className="detail-line">
             <span>{result.output.amount}× {result.output.name} <small>@ {formatCoins(result.output.unitPrice)}</small></span>
             <strong>{formatCoins(result.outputValue)}</strong>
@@ -358,7 +358,7 @@ export function FusionTable({
                   <div className="hero-route-arrow" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5" /></svg></div>
 
                   <div className="hero-route-side hero-route-output">
-                    <span className="hero-route-label">Instant-sell output</span>
+                    <span className="hero-route-label">Sell-offer output</span>
                     <div className="hero-output-item">
                       <ShardIcon shardId={heroOpportunity.output.id} name={heroOpportunity.output.name} size={36} priority />
                       <div>
