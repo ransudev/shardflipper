@@ -10,8 +10,8 @@ import type { FusionResult, FusionScanStats } from "@/types/fusion";
 type SortKey = "profit" | "margin";
 
 const SORTS: { value: string; label: string }[] = [
-  { value: "profit", label: "Profit · highest first" },
-  { value: "margin", label: "Margin · highest first" },
+  { value: "profit", label: "Sell-offer profit - highest first" },
+  { value: "margin", label: "Sell-offer margin - highest first" },
   { value: "insta-buy", label: "Insta-buy · cheapest first" },
   { value: "insta-sell", label: "Insta-sell · highest first" },
 ].filter(({ value }) => value === "profit" || value === "margin");
@@ -98,14 +98,37 @@ function DetailPanel({ result }: { result: FusionResult }) {
       <div className="detail-step detail-sell-step">
         <span className="detail-index">{result.steps.length + 2}</span>
         <div className="detail-step-copy">
-          <span className="detail-kicker">Sell-offer final output</span>
-          <div className="detail-line">
-            <span>{result.output.amount}× {result.output.name} <small>@ {formatCoins(result.output.unitPrice)}</small></span>
-            <strong>{formatCoins(result.outputValue)}</strong>
-          </div>
-          <div className={`detail-profit ${result.profit >= 0 ? "positive" : "negative"}`}>
-            <span>Estimated path profit</span>
-            <strong>{formatSignedCoins(result.profit)}</strong>
+          <span className="detail-kicker">Exit estimates</span>
+          <p className="detail-description">Choose a fast sale into current buy orders or wait for a buyer to fill your sell offer.</p>
+          <div className="detail-exit-options">
+            <div className="detail-exit-option">
+              <div className="detail-exit-heading">
+                <div>
+                  <strong>Instant sale</strong>
+                  <span>Fast exit - fills buy orders</span>
+                </div>
+                <strong className={result.profitValues.instantSell >= 0 ? "positive" : "negative"}>{formatSignedCoins(result.profitValues.instantSell)}</strong>
+              </div>
+              <div className="detail-line">
+                <span>{result.output.amount}× {result.output.name} <small>@ {formatCoins(result.outputValues.instantSell / result.output.amount)}</small></span>
+                <strong>{formatCoins(result.outputValues.instantSell)}</strong>
+              </div>
+              <span className={`detail-exit-margin ${result.marginValues.instantSell >= 0 ? "positive" : "negative"}`}>{formatMargin(result.marginValues.instantSell)} margin</span>
+            </div>
+            <div className="detail-exit-option">
+              <div className="detail-exit-heading">
+                <div>
+                  <strong>Sell offer</strong>
+                  <span>Higher potential - waits for a buyer</span>
+                </div>
+                <strong className={result.profitValues.sellOffer >= 0 ? "positive" : "negative"}>{formatSignedCoins(result.profitValues.sellOffer)}</strong>
+              </div>
+              <div className="detail-line">
+                <span>{result.output.amount}× {result.output.name} <small>@ {formatCoins(result.outputValues.sellOffer / result.output.amount)}</small></span>
+                <strong>{formatCoins(result.outputValues.sellOffer)}</strong>
+              </div>
+              <span className={`detail-exit-margin ${result.marginValues.sellOffer >= 0 ? "positive" : "negative"}`}>{formatMargin(result.marginValues.sellOffer)} margin</span>
+            </div>
           </div>
         </div>
       </div>
@@ -158,9 +181,9 @@ function FusionDetailsDialog({ result, id, onClose }: { result: FusionResult; id
             </div>
           </div>
           <div className="fusion-dialog-summary">
-            <span>Estimated profit</span>
-            <strong className={result.profit >= 0 ? "positive" : "negative"}>{formatSignedCoins(result.profit * fusionRuns)}</strong>
-            <span className={result.margin >= 0 ? "positive" : "negative"}>{formatMargin(result.margin)} margin</span>
+            <span>Sell-offer profit</span>
+            <strong className={result.profitValues.sellOffer >= 0 ? "positive" : "negative"}>{formatSignedCoins(result.profitValues.sellOffer * fusionRuns)}</strong>
+            <span className={result.profitValues.instantSell >= 0 ? "positive" : "negative"}>Instant sale {formatSignedCoins(result.profitValues.instantSell * fusionRuns)}</span>
           </div>
           <form method="dialog">
             <button className="fusion-dialog-close" type="submit" aria-label="Close fusion details">
@@ -358,7 +381,7 @@ export function FusionTable({
                   <div className="hero-route-arrow" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5" /></svg></div>
 
                   <div className="hero-route-side hero-route-output">
-                    <span className="hero-route-label">Sell-offer output</span>
+                    <span className="hero-route-label">Exit estimates</span>
                     <div className="hero-output-item">
                       <ShardIcon shardId={heroOpportunity.output.id} name={heroOpportunity.output.name} size={36} priority />
                       <div>
@@ -366,16 +389,24 @@ export function FusionTable({
                         <span>{heroOpportunity.output.amount} shard{heroOpportunity.output.amount === 1 ? "" : "s"}</span>
                       </div>
                     </div>
-                    <strong className="hero-route-amount">{formatCoins(heroOpportunity.outputValue)}</strong>
+                    <div className="hero-output-values">
+                      <div><span>Instant sale</span><strong>{formatCoins(heroOpportunity.outputValues.instantSell)}</strong></div>
+                      <div><span>Sell offer</span><strong>{formatCoins(heroOpportunity.outputValues.sellOffer)}</strong></div>
+                    </div>
                   </div>
                 </div>
 
                 <div className="hero-rail-profit">
-                  <div>
-                    <span>Estimated profit</span>
-                    <strong className={heroOpportunity.profit >= 0 ? "positive" : "negative"}>{formatSignedCoins(heroOpportunity.profit)}</strong>
+                  <div className="hero-profit-option">
+                    <span>Instant-sale profit</span>
+                    <strong className={heroOpportunity.profitValues.instantSell >= 0 ? "positive" : "negative"}>{formatSignedCoins(heroOpportunity.profitValues.instantSell)}</strong>
+                    <small>{formatMargin(heroOpportunity.marginValues.instantSell)} margin - fast exit</small>
                   </div>
-                  <span className={`hero-rail-margin ${heroOpportunity.margin >= 0 ? "positive" : "negative"}`}>{formatMargin(heroOpportunity.margin)} margin</span>
+                  <div className="hero-profit-option">
+                    <span>Sell-offer profit</span>
+                    <strong className={heroOpportunity.profitValues.sellOffer >= 0 ? "positive" : "negative"}>{formatSignedCoins(heroOpportunity.profitValues.sellOffer)}</strong>
+                    <small>{formatMargin(heroOpportunity.marginValues.sellOffer)} margin - waits for a buyer</small>
+                  </div>
                 </div>
               </>
             ) : (
@@ -433,9 +464,8 @@ export function FusionTable({
               <span>Output</span>
               <span>Starting buys</span>
               <span>Cost</span>
-              <span>Value</span>
-              <span>Profit</span>
-              <span>Margin</span>
+              <span>Instant sale</span>
+              <span>Sell offer</span>
               <span />
             </div>
             <div id="fusion-results" className="fusion-table" role="list" aria-label="Fusion profit opportunities">
@@ -454,9 +484,16 @@ export function FusionTable({
                       </div>
                       <div className="ingredients-cell"><IngredientList result={result} /></div>
                       <div className="number-cell cost-cell"><span className="mobile-label">Cost</span><strong>{formatCoins(result.inputCost)}</strong></div>
-                      <div className="number-cell value-cell secondary"><span className="mobile-label">Value</span><strong>{formatCoins(result.outputValue)}</strong></div>
-                      <div className={`number-cell profit-cell ${result.profit >= 0 ? "positive" : "negative"}`}><span className="mobile-label">Profit</span><strong>{formatSignedCoins(result.profit)}</strong></div>
-                      <div className={`number-cell margin-cell ${result.margin >= 0 ? "positive" : "negative"}`}><span className="mobile-label">Margin</span><strong>{formatMargin(result.margin)}</strong></div>
+                      <div className={`number-cell outcome-cell instant-profit-cell ${result.profitValues.instantSell >= 0 ? "positive" : "negative"}`}>
+                        <span className="mobile-label">Instant sale</span>
+                        <strong>{formatSignedCoins(result.profitValues.instantSell)}</strong>
+                        <span className="outcome-margin">{formatMargin(result.marginValues.instantSell)} margin</span>
+                      </div>
+                      <div className={`number-cell outcome-cell sell-offer-profit-cell ${result.profitValues.sellOffer >= 0 ? "positive" : "negative"}`}>
+                        <span className="mobile-label">Sell offer</span>
+                        <strong>{formatSignedCoins(result.profitValues.sellOffer)}</strong>
+                        <span className="outcome-margin">{formatMargin(result.marginValues.sellOffer)} margin</span>
+                      </div>
                       <button className="expand-button" type="button" aria-haspopup="dialog" aria-expanded={isExpanded} aria-controls={isExpanded ? detailId : undefined} aria-label={`${isExpanded ? "Hide" : "View"} ${result.output.name} starting buys and fusion details`} onClick={() => setExpanded(isExpanded ? null : result.fusionId)}>
                         <svg aria-hidden="true" viewBox="0 0 20 20"><path d="m7 4 6 6-6 6"/></svg>
                       </button>

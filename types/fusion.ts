@@ -46,6 +46,16 @@ export type FusionOutputValues = {
   sellOffer: number;
 };
 
+export type FusionProfitValues = {
+  instantSell: number;
+  sellOffer: number;
+};
+
+export type FusionMarginValues = {
+  instantSell: number;
+  sellOffer: number;
+};
+
 export type FusionResult = {
   fusionId: string;
   inputs: CalculatedIngredient[];
@@ -55,6 +65,8 @@ export type FusionResult = {
   inputCost: number;
   outputValue: number;
   outputValues: FusionOutputValues;
+  profitValues: FusionProfitValues;
+  marginValues: FusionMarginValues;
   profit: number;
   margin: number;
 };

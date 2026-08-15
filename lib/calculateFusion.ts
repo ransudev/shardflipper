@@ -133,8 +133,16 @@ export function calculateFusion(
     instantSell: instantSellPrice * recipe.output.amount,
     sellOffer: sellOfferPrice * recipe.output.amount,
   };
+  const profitValues = {
+    instantSell: outputValues.instantSell - inputCost,
+    sellOffer: outputValues.sellOffer - inputCost,
+  };
+  const marginValues = {
+    instantSell: (profitValues.instantSell / inputCost) * 100,
+    sellOffer: (profitValues.sellOffer / inputCost) * 100,
+  };
   const outputValue = outputValues.sellOffer;
-  const profit = outputValue - inputCost;
+  const profit = profitValues.sellOffer;
   const purchases = new Map<string, { amount: number; totalCost: number }>();
   const steps: FusionPathStep[] = [];
 
@@ -169,8 +177,10 @@ export function calculateFusion(
     inputCost,
     outputValue,
     outputValues,
+    profitValues,
+    marginValues,
     profit,
-    margin: (profit / inputCost) * 100,
+    margin: marginValues.sellOffer,
   };
 }
 
