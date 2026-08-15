@@ -21,21 +21,27 @@ function bestOrderPrice(orders: BazaarOrder[], direction: "highest" | "lowest"):
   return bestPrice;
 }
 
-/** Instant-sell price: what you receive by filling the top Bazaar buy order. */
+/**
+ * Instant-sell price: what you receive by filling the top Bazaar buy order.
+ * Hypixel's `sell_summary` contains those buy orders, despite the API name.
+ */
 export function getInstantSellPrice(product: BazaarProduct): number | null {
-  const bestBuyOrder = bestOrderPrice(product.buy_summary, "highest");
+  const bestBuyOrder = bestOrderPrice(product.sell_summary, "highest");
   if (bestBuyOrder !== null) return bestBuyOrder;
 
-  const quickPrice = product.quick_status.buyPrice;
+  const quickPrice = product.quick_status.sellPrice;
   return validPrice(quickPrice) ? quickPrice : null;
 }
 
-/** Sell-offer price: the current lowest sell offer on the Bazaar. */
+/**
+ * Sell-offer price: the current lowest sell offer on the Bazaar.
+ * Hypixel's `buy_summary` contains those sell offers, despite the API name.
+ */
 export function getSellOfferPrice(product: BazaarProduct): number | null {
-  const bestSellOffer = bestOrderPrice(product.sell_summary, "lowest");
+  const bestSellOffer = bestOrderPrice(product.buy_summary, "lowest");
   if (bestSellOffer !== null) return bestSellOffer;
 
-  const quickPrice = product.quick_status.sellPrice;
+  const quickPrice = product.quick_status.buyPrice;
   return validPrice(quickPrice) ? quickPrice : null;
 }
 
@@ -51,7 +57,7 @@ export function getBuyOrderPrice(product: BazaarProduct): number | null {
 
 /** Hypixel's average buy-order price for the current Bazaar snapshot. */
 export function getAverageBuyOrderPrice(product: BazaarProduct): number | null {
-  const averagePrice = product.quick_status.buyPrice;
+  const averagePrice = product.quick_status.sellPrice;
   return validPrice(averagePrice) ? averagePrice : null;
 }
 

@@ -10,8 +10,8 @@ const { selectBestMarketRecipes } = await import("@/lib/fusionCatalog");
 function product(id: string, inputPrice: number, outputPrice = inputPrice): BazaarProduct {
   return {
     product_id: id,
-    sell_summary: [{ amount: 100, pricePerUnit: inputPrice, orders: 1 }],
     buy_summary: [{ amount: 100, pricePerUnit: outputPrice, orders: 1 }],
+    sell_summary: [{ amount: 100, pricePerUnit: inputPrice, orders: 1 }],
     quick_status: {
       productId: id,
       buyPrice: outputPrice,

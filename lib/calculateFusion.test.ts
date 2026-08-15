@@ -6,12 +6,12 @@ import type { FusionRecipe } from "@/types/fusion";
 function product(id: string, sellOffer: number, buyOrder: number): BazaarProduct {
   return {
     product_id: id,
-    sell_summary: [{ amount: 100, pricePerUnit: sellOffer, orders: 1 }],
-    buy_summary: [{ amount: 100, pricePerUnit: buyOrder, orders: 1 }],
+    buy_summary: [{ amount: 100, pricePerUnit: sellOffer, orders: 1 }],
+    sell_summary: [{ amount: 100, pricePerUnit: buyOrder, orders: 1 }],
     quick_status: {
       productId: id,
-      buyPrice: buyOrder,
-      sellPrice: sellOffer,
+      buyPrice: sellOffer,
+      sellPrice: buyOrder,
       buyVolume: 0,
       sellVolume: 0,
       buyMovingWeek: 0,
@@ -91,8 +91,8 @@ describe("calculateFusion", () => {
 
   it("returns unavailable when a required order book is missing", () => {
     const unavailable = product("SHARD_A", 10_000, 9_000);
-    unavailable.sell_summary = [];
-    unavailable.quick_status.sellPrice = 0;
+    unavailable.buy_summary = [];
+    unavailable.quick_status.buyPrice = 0;
 
     expect(calculateFusion(recipe, {
       SHARD_A: unavailable,
