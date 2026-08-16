@@ -49,7 +49,8 @@ The existing four-point scale remains. Window chrome uses intentionally tighter 
 
 ## What every route shares
 
-- Desktop shortcuts, taskbar, Start menu, system tray, window title bars, menu strips, beveled controls, fonts, spacing, and status-bar language.
+- Taskbar, Start menu, system tray, window title bars, menu strips, beveled controls, fonts, spacing, and status-bar language.
+- Route windows share the centered desktop inset used by the footer, while taskbar links provide persistent route switching.
 - Primary navigation labels and route order.
 - Data formatting and positive/negative semantics.
 

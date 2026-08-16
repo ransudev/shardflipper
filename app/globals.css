@@ -2060,12 +2060,11 @@ button:disabled {
   .windows-statusbar > span:nth-child(3) { display: none; }
 }
 
-/* The calculator is a focused utility: its window and menu share the
-   centered desktop inset used by the status footer. Taskbar links remain the
-   route switcher, so the duplicate desktop rail can stay out of this view. */
+/* Every utility window shares the centered desktop inset used by the status
+   footer. Taskbar and Start menu remain the persistent route switcher. */
 @media (min-width: 48rem) {
-  .calculator-page { padding-inline: 2.25rem; }
-  .calculator-page .desktop-shortcuts { display: none; }
+  .app-content { padding-inline: 2.25rem; }
+  .desktop-shortcuts { display: none; }
 }
 
 @media (hover: hover) and (pointer: fine) {
