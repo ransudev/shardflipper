@@ -1906,7 +1906,7 @@ button:disabled {
 /* Footer as a desktop status note */
 
 .site-footer {
-  width: calc(100% - 6.25rem);
+  width: calc(100% - 4.5rem);
   max-width: var(--content-max);
   margin: 0.5rem auto 1rem;
   border: 1px solid;
