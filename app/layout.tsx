@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <a href="https://api.hypixel.net/" target="_blank" rel="noreferrer">Hypixel API details <svg className="external-link-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M11 4h5v5M16 4l-7 7" /><path d="M14 11v4H5V6h4" /></svg></a>
           </div>
         </footer>
+        <Analytics />
       </body>
     </html>
   );
