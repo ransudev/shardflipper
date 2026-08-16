@@ -3,6 +3,7 @@
 import { useId, useMemo, useState } from "react";
 import Link from "next/link";
 import { ShardIcon } from "@/components/ShardIcon";
+import { WindowsChrome } from "@/components/WindowsChrome";
 import { formatCoins, formatSignedCoins } from "@/lib/formatCoins";
 import type { FusionAcquisitionPlan, FusionPathStep, FusionResult } from "@/types/fusion";
 
@@ -281,7 +282,18 @@ export function InventoryCalculator({
   const inventorySummary = formatInventorySummary(inventoryEntries);
 
   return (
-    <section className="inventory-calculator" aria-labelledby="inventory-form-title">
+    <WindowsChrome
+      className="calculator-window"
+      title="Fusion Calculator — Control Panel"
+      kind="calculator"
+      status={<><span>{hasInventory ? `${enteredShardCount.toLocaleString("en-US")} shards entered` : "Enter your inventory to begin"}</span><span>{hasInventory ? `${recommendations.length} recommendations` : "Live Bazaar prices loaded"}</span></>}
+    >
+      <div className="windows-toolbar calculator-toolbar" aria-label="Calculator location">
+        <span className="windows-address-label">Control Panel</span>
+        <div className="windows-address"><span className="window-glyph window-glyph-calculator" aria-hidden="true">123</span><span>Market Tools\Fusion Calculator</span></div>
+        <Link className="windows-go-button" href="/">Paths</Link>
+      </div>
+      <section className="inventory-calculator" aria-labelledby="inventory-form-title">
       <div className="inventory-calculator-grid">
         <form className="inventory-panel" onSubmit={(event) => event.preventDefault()}>
           <div className="inventory-panel-heading">
@@ -402,7 +414,7 @@ export function InventoryCalculator({
                   <article className="calculator-result-card" key={recommendation.fusionId}>
                     <div className="calculator-result-card-head">
                       <div className="calculator-result-output">
-                        <span className="calculator-rank" aria-label={`Rank ${index + 1}`}>{index < 3 ? ["🥇", "🥈", "🥉"][index] : `${index + 1}.`}</span>
+                        <span className="calculator-rank" aria-label={`Rank ${index + 1}`}>{index + 1}</span>
                         <ShardIcon shardId={recommendation.output.id} name={recommendation.output.name} size={42} priority={index === 0} />
                         <div>
                           <h3>{recommendation.output.name}</h3>
@@ -470,6 +482,7 @@ export function InventoryCalculator({
           </Link>
         </div>
       </div>
-    </section>
+      </section>
+    </WindowsChrome>
   );
 }

@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ShardIcon } from "@/components/ShardIcon";
-import Scanner from "@/components/Scanner";
 import { Topbar } from "@/components/Topbar";
+import { WindowsChrome } from "@/components/WindowsChrome";
 import { formatCoins, formatMargin, formatSignedCoins } from "@/lib/formatCoins";
 import type { FusionResult, FusionScanStats } from "@/types/fusion";
 
@@ -306,46 +306,35 @@ export function FusionTable({
   };
 
   return (
-    <div className="app-content" id="page-content">
+    <div className="app-content paths-page" id="page-content">
       <Topbar current="paths" />
+      <WindowsChrome
+        className="paths-window"
+        title="Shard Fusion Finder — Live Bazaar"
+        kind="explorer"
+        status={<><span>{visibleResults.length} path objects</span><span>{scanStats.pricedCandidates.toLocaleString("en-US")} candidates priced</span><span>Updated {freshnessLabel}</span></>}
+      >
+      <div className="windows-toolbar" aria-label="Location and view information">
+        <button type="button" disabled aria-label="Back"><span aria-hidden="true">←</span></button>
+        <button type="button" disabled aria-label="Forward"><span aria-hidden="true">→</span></button>
+        <span className="windows-toolbar-separator" aria-hidden="true" />
+        <span className="windows-address-label">Address</span>
+        <div className="windows-address"><span className="window-glyph window-glyph-folder" aria-hidden="true"><i /></span><span>My Computer\Hypixel Bazaar\Shard Paths</span></div>
+        <a href="#shard-list" className="windows-go-button">Go</a>
+      </div>
       <section className="hero" aria-labelledby="page-title">
-        <Scanner
-          className="hero-scanner"
-          color1="#11111B"
-          color2="#89B4FA"
-          color3="#B4BEFE"
-          speed={0.35}
-          sweepSpeed={0.18}
-          sweepWidth={1.8}
-          sweepFalloff={7}
-          scale={1.6}
-          frequency={1.7}
-          ripple={0.18}
-          bandDensity={9}
-          lineSharpness={4.8}
-          glow={0.16}
-          colorSpread={0.32}
-          brightness={0.7}
-          contrast={1.1}
-          softness={1.8}
-          vignette={0.7}
-          scanline
-          grain={false}
-          opacity={0.7}
-          mouseInteraction={false}
-        />
         <div className="hero-inner">
           <div className="hero-copy">
-            <p className="hero-kicker"><span className="hero-kicker-rule" aria-hidden="true" /><span>Live Bazaar</span><span className="hero-kicker-divider" aria-hidden="true">/</span><span>Hypixel SkyBlock</span></p>
-            <h1 id="page-title">Find the shard worth <span>fusing.</span></h1>
-            <p className="hero-description">Compare live Bazaar prices, see the cost of every ingredient, and start with the path that leaves the most coins behind.</p>
+            <p className="hero-kicker"><span className="hero-kicker-rule" aria-hidden="true" /><span>Welcome to Shard Fusion Finder</span></p>
+            <h1 id="page-title">Choose a profitable shard path</h1>
+            <p className="hero-description">The live Bazaar snapshot is ready. Compare every starting purchase, inspect the fusion chain, and choose between a fast instant sale or a higher-potential sell offer.</p>
             <div className="hero-actions">
               <a className="hero-cta" href="#shard-list">
-                Browse shard paths
+                View all shard paths
                 <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5" /></svg>
               </a>
               <a className="hero-text-link" href="#scanner-title">
-                See how it works
+                Open details view
                 <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5" /></svg>
               </a>
             </div>
@@ -355,8 +344,8 @@ export function FusionTable({
           <aside className="hero-rail" aria-label="Live market snapshot">
             <div className="hero-rail-head">
               <div>
-                <span className="hero-rail-eyebrow">Live opportunity</span>
-                <strong>Best priced path</strong>
+                <span className="hero-rail-eyebrow">Market summary</span>
+                <strong>Best priced path in this folder</strong>
               </div>
               <span className="hero-rail-status"><span className="live-dot" aria-hidden="true" />Synced {freshnessLabel}</span>
             </div>
@@ -419,7 +408,7 @@ export function FusionTable({
             </div>
           </aside>
         </div>
-        <a className="hero-scroll-cue" href="#shard-list"><span>Explore all paths</span><svg aria-hidden="true" viewBox="0 0 20 20"><path d="M10 3v13M5 11l5 5 5-5" /></svg></a>
+        <a className="hero-scroll-cue" href="#shard-list"><span>Switch to Details view</span><svg aria-hidden="true" viewBox="0 0 20 20"><path d="M10 3v13M5 11l5 5 5-5" /></svg></a>
       </section>
 
       <section className="shard-lister" id="shard-list" aria-labelledby="scanner-title">
@@ -521,6 +510,7 @@ export function FusionTable({
           </nav>
         )}
       </section>
+      </WindowsChrome>
     </div>
   );
 }

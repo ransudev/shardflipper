@@ -1,4 +1,4 @@
-/* Shard Fusion Finder · design tokens · indigo to lavender */
+/* Shard Fusion Finder · Windows desktop design tokens */
 
 :root {
   /* Surfaces: one indigo family, stepped lighter like the reference swatch */
@@ -85,4 +85,78 @@
   --z-base: 1;
   --z-raised: 10;
   --z-sticky: 200;
+}
+
+/* Locked Windows shell overrides. The earlier declarations retain the
+   established spacing and motion primitives; this final block is the active
+   visual palette for every route. */
+:root {
+  --color-desktop: oklch(48% 0.085 190);
+  --color-desktop-deep: oklch(39% 0.075 190);
+  --color-desktop-sheen: oklch(99% 0.004 245 / 0.04);
+  --color-icon-shadow: oklch(35% 0.02 250 / 0.45);
+  --color-dialog-backdrop: oklch(22% 0.018 250 / 0.62);
+  --color-paper: oklch(91% 0.012 245);
+  --color-paper-2: oklch(82% 0.012 245);
+  --color-paper-3: oklch(69% 0.014 245);
+  --color-surface: oklch(98% 0.006 245);
+  --color-surface-2: oklch(88% 0.012 245);
+  --color-rule: oklch(57% 0.014 245);
+  --color-rule-strong: oklch(35% 0.02 250);
+  --color-highlight: oklch(99% 0.004 245);
+  --color-ink: oklch(22% 0.018 250);
+  --color-ink-2: oklch(31% 0.018 250);
+  --color-neutral: oklch(42% 0.016 250);
+  --color-muted: oklch(38% 0.018 250);
+  --color-accent: oklch(49% 0.19 255);
+  --color-accent-2: oklch(65% 0.17 250);
+  --color-accent-dark: oklch(32% 0.15 258);
+  --color-accent-soft: oklch(88% 0.07 250);
+  --color-accent-ink: oklch(98% 0.008 245);
+  --color-focus: oklch(52% 0.21 255);
+  --color-info: oklch(43% 0.15 248);
+  --color-market: oklch(38% 0.12 280);
+  --color-start: oklch(56% 0.16 142);
+  --color-start-dark: oklch(39% 0.12 142);
+  --color-start-light: oklch(70% 0.14 142);
+  --color-positive: oklch(42% 0.13 145);
+  --color-positive-soft: oklch(91% 0.045 145);
+  --color-error: oklch(46% 0.17 25);
+  --color-error-soft: oklch(91% 0.05 25);
+  --color-warning: oklch(62% 0.14 78);
+  --color-taskbar: oklch(43% 0.19 256);
+  --color-taskbar-light: oklch(58% 0.2 252);
+  --color-taskbar-dark: oklch(30% 0.14 260);
+  --color-tray: oklch(55% 0.17 244);
+  --color-titlebar: oklch(48% 0.2 255);
+  --color-titlebar-light: oklch(66% 0.18 250);
+  --color-titlebar-dark: oklch(32% 0.16 258);
+  --color-caption-close: oklch(49% 0.18 28);
+  --color-hero: var(--color-surface);
+  --color-hero-rule: var(--color-rule);
+  --font-display: var(--font-body);
+  --font-body: Tahoma, "Segoe UI", "MS Sans Serif", ui-sans-serif, sans-serif;
+  --font-mono: "Lucida Console", "Courier New", ui-monospace, monospace;
+  --text-xs: 0.6875rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 1.875rem;
+  --text-3xl: 2.25rem;
+  --text-display: clamp(1.75rem, 4vw, 2.75rem);
+  --page-gutter: clamp(0.5rem, 2vw, 1.5rem);
+  --content-max: 100rem;
+  --radius-sm: 0;
+  --radius-md: 0.25rem;
+  --shadow-whisper: 0 0.1875rem 0.75rem oklch(18% 0.04 250 / 0.35);
+  --shadow-window: 0 0.375rem 1.25rem oklch(18% 0.04 250 / 0.42);
+  --dur-micro: 100ms;
+  --dur-short: 180ms;
+  --dur-long: 280ms;
+  --z-dropdown: 100;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
 }

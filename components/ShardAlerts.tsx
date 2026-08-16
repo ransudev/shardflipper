@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { ShardIcon } from "@/components/ShardIcon";
+import { WindowsChrome } from "@/components/WindowsChrome";
 import { formatCoins } from "@/lib/formatCoins";
 import { SHARD_SPIKE_THRESHOLD_PERCENT, type ShardAlert, type ShardAlertSnapshot } from "@/types/shardAlerts";
 
@@ -93,7 +95,18 @@ export function ShardAlerts({
   };
 
   return (
-    <section className="alerts-content" aria-labelledby="alerts-list-title">
+    <WindowsChrome
+      className="alerts-window"
+      title="Shard Alerts — System Monitor"
+      kind="monitor"
+      status={<><span>{snapshot ? `${risingRows.length} active price alerts` : "No saved snapshot"}</span><span>{directCount} direct shards monitored</span><span>Updated {freshnessLabel}</span></>}
+    >
+      <div className="windows-toolbar alerts-toolbar" aria-label="Monitor location">
+        <span className="windows-address-label">Console</span>
+        <div className="windows-address"><span className="window-glyph window-glyph-monitor" aria-hidden="true"><i /></span><span>Market Tools\Shard Alerts\Current Snapshot</span></div>
+        <Link className="windows-go-button" href="/">Paths</Link>
+      </div>
+      <section className="alerts-content" aria-labelledby="alerts-list-title">
       <div className="alerts-content-inner">
         <div className="alerts-status-line">
           <span className={`live-dot ${snapshot ? "" : "status-dot-muted"}`} aria-hidden="true" />
@@ -189,6 +202,7 @@ export function ShardAlerts({
           </>
         )}
       </div>
-    </section>
+      </section>
+    </WindowsChrome>
   );
 }
