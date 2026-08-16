@@ -37,10 +37,19 @@ yarn-error.log*
 # vercel
 .vercel
 
-# local agent artifacts
-.codex
-.hallmark
-.impeccable
+# AI/editor instruction files
+AGENTS.md
+CLAUDE.md
+CODEX.md
+
+# local AI/editor workspace artifacts
+.agents/
+.codex/
+.cursor/
+.hallmark/
+.impeccable/
+.claude/
+.windsurf/
 
 # local reference source
 /reference/
