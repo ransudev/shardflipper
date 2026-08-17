@@ -71,7 +71,7 @@ describe("fusion catalog selection", () => {
     ]);
   });
 
-  it("keeps each selected path tied to its direct recipe inputs", () => {
+  it("uses a cheaper intermediate fusion in the selected path", () => {
     const source: FusionCatalog = {
       shards: {
         A: shard("A"),
@@ -96,11 +96,21 @@ describe("fusion catalog selection", () => {
     const selection = selectBestMarketRecipes(products, source);
     const outputPath = selection.recipes.find((recipe) => recipe.output.id === "SHARD_O");
 
-    expect(outputPath?.inputPlans).toBeUndefined();
-    expect(outputPath?.inputs).toEqual([
-      { id: "SHARD_C", amount: 1 },
-      { id: "SHARD_D", amount: 1 },
+    expect(outputPath?.inputPlans?.[0]).toMatchObject({
+      id: "SHARD_C",
+      method: "fuse",
+      totalCost: 20,
+      producedAmount: 1,
+    });
+    expect(outputPath?.inputPlans?.[0].inputs).toEqual([
+      { id: "SHARD_A", amount: 1, method: "buy", totalCost: 10 },
+      { id: "SHARD_B", amount: 1, method: "buy", totalCost: 10 },
     ]);
+    expect(outputPath?.inputPlans?.[1]).toMatchObject({
+      id: "SHARD_D",
+      method: "buy",
+      totalCost: 10,
+    });
   });
 
   it("covers the complete catalog without materializing client rows", () => {
