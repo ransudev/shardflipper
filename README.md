@@ -20,7 +20,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Data model
 
-The complete fusion catalog comes from `data/fusion-data.json`. Direct/Fuse classification comes from the SkyShards acquisition rates in `data/rates.json`; a shard with a non-zero base acquisition rate is Direct. The app converts the catalog into its own normalized model, removes mirrored ingredient pairs, prices each recipe from its listed Bazaar ingredients, and keeps up to five lowest-cost routes for each final output and quantity. The current catalog contains 134,971 unique candidates, 408 output/quantity groups, and up to 2,040 displayed path variants.
+The complete fusion catalog comes from `data/fusion-data.json`. Direct/Fuse classification comes from the SkyShards acquisition rates in `data/rates.json`; a shard with a non-zero base acquisition rate is Direct. The app converts the catalog into its own normalized model, removes mirrored ingredient pairs, prices each recipe from its listed Bazaar ingredients, and keeps the lowest-cost route for each final output and quantity. The current catalog contains 134,971 unique candidates and 408 displayed output/quantity paths.
 
 Expanded results show the direct Bazaar purchases, the fusion, and both exit estimates: fast instant-sale profit through current buy orders and higher-potential sell-offer profit. Paths are ranked by estimated sell-offer profit by default and can also be sorted by sell-offer margin.
 

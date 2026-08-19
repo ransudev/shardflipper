@@ -35,7 +35,7 @@ type SelectedRecipe = {
   recipe: FusionRecipe;
 };
 
-const MAX_PATHS_PER_OUTPUT = 5;
+const MAX_PATHS_PER_OUTPUT = 1;
 
 type CatalogRecipes = {
   recipes: FusionRecipe[];
