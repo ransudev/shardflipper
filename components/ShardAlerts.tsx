@@ -126,7 +126,6 @@ export function ShardAlerts({
         <div className="alerts-heading">
           <div>
             <h2 id="alerts-list-title">Direct shards above average</h2>
-            <p>{snapshot ? `Compared with Hypixel’s average buy-order price in the current Bazaar snapshot. Spikes are ${SHARD_SPIKE_THRESHOLD_PERCENT}% or more above average.` : "A background scan has not saved a Bazaar snapshot yet."}</p>
           </div>
           <label className="alerts-sort" htmlFor="alerts-sort">
             <span>Sort by</span>

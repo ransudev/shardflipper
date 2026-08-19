@@ -327,7 +327,6 @@ export function FusionTable({
           <div className="hero-copy">
             <p className="hero-kicker"><span className="hero-kicker-rule" aria-hidden="true" /><span>Welcome to Shard Fusion Finder</span></p>
             <h1 id="page-title">Choose a profitable shard path</h1>
-            <p className="hero-description">The live Bazaar snapshot is ready. Compare every starting purchase, inspect the fusion chain, and choose between a fast instant sale or a higher-potential sell offer.</p>
             <div className="hero-actions">
               <a className="hero-cta" href="#shard-list">
                 View all shard paths
@@ -415,7 +414,6 @@ export function FusionTable({
         <div className="lister-heading">
           <div>
             <h2 id="scanner-title">Shard paths</h2>
-            <p>Search any shard in the chain. Each path compares direct buys with cheaper intermediate fusions.</p>
           </div>
           <p className="lister-meta">{scanStats.pricedCandidates.toLocaleString("en-US")} candidates priced · {PAGE_SIZE} per page</p>
         </div>

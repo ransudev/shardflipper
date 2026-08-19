@@ -303,8 +303,6 @@ export function InventoryCalculator({
             </div>
             <span className="inventory-count">{formatQuantity(enteredShardCount)} entered</span>
           </div>
-          <p className="inventory-panel-description">Add the shards in your storage. The calculator uses them as an opportunity cost, then ranks the paths that leave you with more value than selling them as-is.</p>
-
           <div className="inventory-rows">
             {inventory.map((row, index) => (
               <div className="inventory-row" key={row.key}>
