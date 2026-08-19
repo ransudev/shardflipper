@@ -35,6 +35,8 @@ type SelectedRecipe = {
   recipe: FusionRecipe;
 };
 
+const MAX_PATHS_PER_OUTPUT = 5;
+
 type CatalogRecipes = {
   recipes: FusionRecipe[];
   uniqueCandidates: number;
@@ -221,7 +223,7 @@ export function selectBestMarketRecipes(
   const catalogRecipes = source === catalog
     ? defaultCatalogRecipes
     : collectCatalogRecipes(source);
-  const bestByOutput = new Map<string, SelectedRecipe>();
+  const selectedByOutput = new Map<string, SelectedRecipe[]>();
   const directCosts = new Map<string, number>();
   const outputPrices = new Map<string, number | null>();
   let pricedCandidates = 0;
@@ -264,16 +266,21 @@ export function selectBestMarketRecipes(
     const resolvedPlans = inputPlans as FusionAcquisitionPlan[];
     const cost = resolvedPlans.reduce((total, plan) => total + plan.totalCost, 0);
     const outputKey = `${recipe.output.id}:${recipe.output.amount}`;
-    const current = bestByOutput.get(outputKey);
-    if (current && current.cost <= cost) continue;
-
-    bestByOutput.set(outputKey, {
+    const current = selectedByOutput.get(outputKey) ?? [];
+    current.push({
       cost,
       recipe: { ...recipe, inputPlans: resolvedPlans },
     });
+    current.sort((left, right) =>
+      left.cost - right.cost || left.recipe.id.localeCompare(right.recipe.id),
+    );
+    if (current.length > MAX_PATHS_PER_OUTPUT) current.length = MAX_PATHS_PER_OUTPUT;
+    selectedByOutput.set(outputKey, current);
   }
 
-  const recipes = Array.from(bestByOutput.values(), ({ recipe }) => recipe);
+  const recipes = Array.from(selectedByOutput.values(), (selections) =>
+    selections.map(({ recipe }) => recipe),
+  ).flat();
   return {
     recipes,
     stats: {

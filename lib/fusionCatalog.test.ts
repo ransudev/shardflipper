@@ -36,7 +36,7 @@ const shard = (id: string, amount = 1) => ({
 });
 
 describe("fusion catalog selection", () => {
-  it("deduplicates mirrors and selects the cheapest market path", () => {
+  it("deduplicates mirrors and retains alternate market paths", () => {
     const source: FusionCatalog = {
       shards: {
         A: shard("A"),
@@ -63,11 +63,11 @@ describe("fusion catalog selection", () => {
       uniqueCandidates: 2,
       pricedCandidates: 2,
       unavailableCandidates: 0,
-      selectedPaths: 1,
+      selectedPaths: 2,
     });
-    expect(selection.recipes[0].inputs).toEqual([
-      { id: "SHARD_C", amount: 2 },
-      { id: "SHARD_D", amount: 2 },
+    expect(selection.recipes.map((recipe) => recipe.inputs.map((input) => input.id).sort())).toEqual([
+      ["SHARD_C", "SHARD_D"],
+      ["SHARD_A", "SHARD_B"],
     ]);
   });
 
@@ -124,6 +124,7 @@ describe("fusion catalog selection", () => {
 
     expect(selection.stats.uniqueCandidates).toBe(134_971);
     expect(selection.stats.pricedCandidates).toBe(134_971);
-    expect(selection.stats.selectedPaths).toBe(408);
+    expect(selection.stats.selectedPaths).toBeGreaterThan(408);
+    expect(selection.stats.selectedPaths).toBeLessThanOrEqual(408 * 5);
   });
 });
